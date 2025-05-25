@@ -1,11 +1,28 @@
-import React from 'react'
+import React from 'react';
+import Header from './components/Header';
+import Intro from './components/Intro';
+import CardAddDog from './components/CardAddDog';
+import { CirclePlus } from 'lucide-react';
 
 function App() {
 
   return (
-    <>
-      <h1>Hello World!</h1>
-    </>
+    <div className="min-h-screen bg-[#FFFDF3]">
+      <Header />
+      <div className="pt-[48px] pb-[48px] pr-[280px] pl-[280px]">
+        <Intro
+          headline="Hello Doglover!" text=""/>
+        <CardAddDog
+          headline="Add your first 4-legged visitor"
+          text="Lorem ipsum dolor sit amet consectetur.
+          Blandit congue sit sagittis cursus netus.
+          Integer elementum eget libero et pellentesque blandit
+          pellentesque viverra varius."
+          icon={<CirclePlus strokeWidth={3}/>}
+          buttonText="Add a dog"/>
+      </div>
+
+    </div>
   )
 }
 
