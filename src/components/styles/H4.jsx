@@ -1,7 +1,8 @@
-export default function H4(props) {
+export default function H4({text, className="", ...props}) {
+    const defaultClasses = "font-inter font-black text-2xl text-[#4662FF]"
     return(
-        <h4 className="font-inter text-2xl font-black text-[#4662FF] mb-[16px]">
-            {props.text}
+        <h4 className={`${defaultClasses} ${className}`} {...props}>
+            {text}
         </h4>
     )
 }

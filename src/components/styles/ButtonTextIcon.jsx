@@ -1,8 +1,9 @@
-export default function ButtonTextIcon(props) {
-    return(
-        <button className="flex items-center justify-between font-inter font-bold pl-[20px] pr-[12px] h-[48px] w-[224px] bg-black text-white rounded-full cursor-pointer">
-            {props.text}
-            {props.icon}
+export default function ButtonTextIcon({ text, icon, className="", ...props }) {
+    const defaultClasses = "flex items-center justify-between pl-5 pr-3 h-12 w-56 rounded-full bg-black font-inter font-bold text-white cursor-pointer";
+    return (
+        <button className={`${defaultClasses} ${className}`} {...props}>
+            {text}
+            {icon}
         </button>
-    )
+    );
 }
