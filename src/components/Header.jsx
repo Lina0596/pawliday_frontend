@@ -6,15 +6,15 @@ import { UserRound } from "lucide-react";
 
 export default function Header() {
   return (
-    <div className="flex items-center justify-between h-30 px-45 bg-[#FFFDF3]">
+    <div className="flex items-center justify-between h-20 px-45 bg-[#F9F3E1] sticky top-0 z-50">
       <Link to="/">
         <Logo />
       </Link>
       <div className="flex items-center gap-16">
-        <Link to="owners" className="font-black">
+        <Link to="owners" className="font-black text-base">
           Owners
         </Link>
-        <Link to="dogs" className="font-black">
+        <Link to="dogs" className="font-black text-base">
           Dogs
         </Link>
         <Link to="profile">

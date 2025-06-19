@@ -1,9 +1,11 @@
-export default function ImageCircle({src, alt, className="", ...props}) {
-    const defaultClasses = "rounded-full h-25 w-25 object-cover shadow-[0px_4px_4px_rgba(0,0,0,0.25)]"
-    return(
-        <img className={`${defaultClasses} ${className}`} {...props}
-            src={src}
-            alt={alt}
-        />
-    )
+export default function ImageCircle({ src, alt }) {
+  return (
+    <div className="flex items-center justify-center rounded-full h-26 w-26 bg-[#F0E5C2]">
+      <img
+        className="rounded-full h-16 w-16 object-cover"
+        src={src}
+        alt={alt}
+      />
+    </div>
+  );
 }

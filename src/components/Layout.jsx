@@ -6,7 +6,7 @@ export default function Layout() {
   return (
     <div>
       <Header />
-      <main className="bg-[#FFFDF3] py-12 px-70 min-h-screen">
+      <main className="bg-[#FFFDF3] py-20 px-45 min-h-screen">
         <Outlet />
       </main>
       <Footer />

@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { getSitter, getOwners, getDogs } from "../api/api";
+import { Link } from "react-router-dom";
 import { Pencil, CirclePlus } from "lucide-react";
+import H2 from "../components/styles/H2";
 import CardOne from "../components/CardOne";
-import CardTwo from "../components/CardTwo";
+import OwnerCards from "../components/OwnerCards";
 
 export default function Owners() {
   // States
@@ -53,25 +55,13 @@ export default function Owners() {
   if (error) {
     return <h1>{error.message}</h1>;
   }
+
   return (
     <div>
+      <H2 className="mb-8">Owners</H2>
+      <div className="mb-8 border-t-4 border-dotted border-[#F0E5C2]"></div>
       {owners.length > 0 ? (
-        owners.map((owner) => {
-          const dogImages = dogs
-            .filter((dog) => dog.owner_id === owner.owner_id)
-            .map((dog) => dog.img_url);
-          return (
-            <CardTwo
-              key={owner.owner_id}
-              className="mb-10"
-              name={`${owner.first_name} ${owner.last_name}`}
-              email={owner.email}
-              phoneNumber={owner.phone_number}
-              buttonIcon={<Pencil strokeWidth={3} />}
-              images={dogImages}
-            />
-          );
-        })
+        <OwnerCards owners={owners} dogs={dogs} />
       ) : (
         <CardOne
           key={sitter.sitter_id}

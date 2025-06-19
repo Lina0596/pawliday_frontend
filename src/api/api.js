@@ -20,6 +20,34 @@ export async function getOwners(sitterId) {
     return data;
 }
 
+export async function getOwner(sitterId, ownerId) {
+    const res = await fetch(`https://pawliday-backend.onrender.com/api/sitters/${sitterId}/owners/${ownerId}`);
+    if (!res.ok) {
+        const error = await res.json()
+        throw new Error(error.error);
+    }
+    const data = await res.json();
+    console.log(data);
+    return data;
+}
+
+export async function addOwner(sitterId, newData) {
+    const res = await fetch(`https://pawliday-backend.onrender.com/api/sitters/${sitterId}/owners`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(newData)
+    })
+    if (!res.ok) {
+        const error = await res.json()
+        throw new Error(error.error);
+    }
+    const data = await res.json();
+    console.log(data);
+    return data.message;
+}
+
 export async function getDogs(sitterId) {
     const res = await fetch(`https://pawliday-backend.onrender.com/api/sitters/${sitterId}/dogs`);
     if (!res.ok) {
