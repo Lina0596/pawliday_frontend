@@ -1,9 +1,9 @@
-export default function IconCorner({ icon, className = "", ...props }) {
-  const defaultClasses =
-    "flex items-center justify-center font-inter h-10 w-10 pl-2.5 pb-2.5  pt-1.5 pr-1.5 bg-black text-white rounded-tr-sm rounded-bl-10 cursor-pointer";
+export default function IconCorner({ icon }) {
   return (
-    <button className={`${defaultClasses} ${className}`} {...props}>
-      {icon}
-    </button>
+    <div className="absolute top-0 right-0 z-10">
+      <div className="flex items-center justify-center font-inter h-10 w-10 pl-2.5 pb-2.5  pt-1.5 pr-1.5 bg-[#F0E5C2] text-white rounded-tr-sm rounded-bl-[24px] cursor-pointer">
+        {icon}
+      </div>
+    </div>
   );
 }

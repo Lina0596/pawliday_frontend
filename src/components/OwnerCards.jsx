@@ -3,9 +3,9 @@ import H4 from "./styles/H4";
 import TextSection from "./styles/TextSection";
 import ImageCircle from "./styles/ImageCircle";
 
-export default function OwnerCards({ owners, dogs, className = "", ...props }) {
+export default function OwnerCards({ owners, dogs }) {
   return (
-    <div class="grid gap-8 grid-cols-1 sm:grid-cols-1 lg:grid-cols-3">
+    <div className="grid gap-8 grid-cols-1 sm:grid-cols-1 lg:grid-cols-2">
       {owners.map((owner) => {
         const dogImages = dogs
           .filter((dog) => dog.owner_id === owner.owner_id)
