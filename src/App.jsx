@@ -27,6 +27,8 @@ export default function App() {
             />
             <Route path="dogs" element={<Dogs />} />
             <Route path="dogs/:dogId" element={<DogDetail />} />
+            <Route path="dogs/:dogId/update" element={<DogUpdateForm />} />
+            <Route path="dogs/add" element={<DogAddForm />} />
           </Route>
         </Routes>
       </BrowserRouter>

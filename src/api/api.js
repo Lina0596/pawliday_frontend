@@ -58,3 +58,14 @@ export async function getDogs(sitterId) {
     console.log(data);
     return data;
 }
+
+export async function getDog(sitterId, dogId) {
+    const res = await fetch(`https://pawliday-backend.onrender.com/api/sitters/${sitterId}/dogs/${dogId}`);
+    if (!res.ok) {
+        const error = await res.json()
+        throw new Error(error.error);
+    }
+    const data = await res.json();
+    console.log(data);
+    return data;
+}

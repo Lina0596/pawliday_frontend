@@ -8,14 +8,17 @@ import Pill from "./styles/Pill";
 
 export default function DogCards({ dogs, owners }) {
   return (
-    <div className="grid gap-8 grid-cols-1 sm:grid-cols-1 lg:grid-cols-2">
+    <div className="grid gap-8 grid-cols-1 lg:grid-cols-2">
       {dogs.map((dog) => {
         const dogOwner = owners.find(
           (owner) => dog.owner_id === owner.owner_id
         );
         return (
           <Link to={`/dogs/${dog.dog_id}`}>
-            <div className="flex-col relative rounded-sm p-8 bg-[#F9F3E1]">
+            <div
+              className="flex-col relative rounded-sm p-8 bg-[#F9F3E1]"
+              key={dog.dog_id}
+            >
               <IconCorner
                 icon={
                   dog.gender === "male" ? (
@@ -30,7 +33,7 @@ export default function DogCards({ dogs, owners }) {
                   <ImageCircle
                     key={dog.dog_id}
                     src={dog.img_url}
-                    alt={`dog image from ${dog.name}`}
+                    alt={dog.name}
                   />
                 </div>
                 <div>
@@ -40,7 +43,7 @@ export default function DogCards({ dogs, owners }) {
               </div>
               <div className="flex flex-wrap gap-2">
                 <Pill>{dog.breed}</Pill>
-                <Pill>{`${dog.height} height`}</Pill>
+                <Pill>{`${dog.height} cm`}</Pill>
                 <Pill>{`${dog.weight} kg`}</Pill>
               </div>
             </div>
