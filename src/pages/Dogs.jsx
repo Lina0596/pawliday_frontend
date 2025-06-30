@@ -17,7 +17,7 @@ export default function Dogs() {
     <div>
       <div className="flex justify-between">
         <H2 className="mb-8">Dogs</H2>
-        <Link to="/owners/add">
+        <Link to="/dogs/add">
           <ButtonTextIcon
             text="Add a dog"
             icon={<CirclePlus strokeWidth={3} />}

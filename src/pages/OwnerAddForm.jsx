@@ -1,12 +1,10 @@
-import { useState, useEffect } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { addOwner } from "../api/api";
 import H2 from "../components/styles/H2";
 import ButtonText from "../components/styles/ButtonText";
 import H6 from "../components/styles/H6";
-import ButtonImage from "../components/styles/ButtonImage";
-import { Plus } from "lucide-react";
 
 export default function OwnerAddForm() {
   const [loading, setLoading] = useState(false);

@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { addDog } from "../api/api";
 import H2 from "../components/styles/H2";
@@ -262,6 +262,8 @@ export default function DogAddForm() {
               )}
             </div>
           </div>
+
+          <div className="my-8 border-t-4 border-dotted border-[#F0E5C2] w-full"></div>
 
           <H6 className="mb-4">Training options</H6>
           <label className="flex items-center gap-2">

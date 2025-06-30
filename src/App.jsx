@@ -10,6 +10,7 @@ import Dogs from "./pages/Dogs";
 import DogDetail from "./pages/DogDetail";
 import DogUpdateForm from "./pages/DogUpdateForm";
 import DogAddForm from "./pages/DogAddForm";
+import DecisionForm from "./pages/DecisionForm";
 
 export default function App() {
   return (
@@ -28,6 +29,7 @@ export default function App() {
             <Route path="dogs" element={<Dogs />} />
             <Route path="dogs/:dogId" element={<DogDetail />} />
             <Route path="dogs/:dogId/update" element={<DogUpdateForm />} />
+            <Route path="dogs/add" element={<DecisionForm />} />
             <Route path="dogs/add/:ownerId" element={<DogAddForm />} />
           </Route>
         </Routes>

@@ -32,7 +32,7 @@ export default function OwnerCards({ owners, dogs }) {
                       </Link>
                     ))
                   ) : (
-                    <Link to="/dogs/add">
+                    <Link to={`/dogs/add/${owner.owner_id}`}>
                       <ButtonImage icon={<Plus strokeWidth={3} />} />
                     </Link>
                   )}
