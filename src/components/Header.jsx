@@ -6,7 +6,7 @@ import { UserRound } from "lucide-react";
 
 export default function Header() {
   return (
-    <div className="flex items-center justify-between h-16 px-45 bg-[#F9F3E1]">
+    <div className="flex items-center justify-between h-16 px-4 bg-[#F9F3E1] xl:px-45 lg:px-40 md:px-20 sm:px-10">
       <Link to="/">
         <Logo />
       </Link>

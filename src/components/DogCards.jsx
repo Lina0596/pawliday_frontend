@@ -8,7 +8,7 @@ import Pill from "./styles/Pill";
 
 export default function DogCards({ dogs, owners }) {
   return (
-    <div className="grid gap-8 grid-cols-1 lg:grid-cols-2">
+    <div className="grid gap-8 grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
       {dogs.map((dog) => {
         const dogOwner = owners.find(
           (owner) => dog.owner_id === owner.owner_id

@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { DataContext } from "../context/DataContext";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { addOwner } from "../api/api";
@@ -7,8 +8,9 @@ import ButtonText from "../components/styles/ButtonText";
 import H6 from "../components/styles/H6";
 
 export default function OwnerAddForm() {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const { loadOwnersAndDogs, loading, error } = useContext(DataContext);
+  const [loadingSubmit, setLoadingSubmit] = useState(false);
+  const [errorSubmit, setErrorSubmit] = useState(null);
   const navigate = useNavigate();
   const {
     register,
@@ -17,22 +19,25 @@ export default function OwnerAddForm() {
   } = useForm();
 
   const onSubmit = async (data) => {
-    setLoading(true);
+    setLoadingSubmit(true);
     try {
       const res = await addOwner(1, data);
+      await loadOwnersAndDogs();
       const newOwnerId = res.owner_id;
-      setError(null);
+      setErrorSubmit(null);
       navigate(`/dogs/add/${newOwnerId}`);
     } catch (err) {
-      setError(err);
+      setErrorSubmit(err);
     } finally {
-      setLoading(false);
+      setLoadingSubmit(false);
     }
   };
 
-  if (loading) {
+  if (loadingSubmit) {
     return <h1>Loading...</h1>;
   }
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <div className="flex flex-col items-center justify-center">
@@ -40,9 +45,9 @@ export default function OwnerAddForm() {
         <H2 className="text-center">Add a new owner</H2>
 
         <div className="my-8 border-t-4 border-dotted border-[#F0E5C2] w-full"></div>
-        {error ? (
+        {errorSubmit ? (
           <div className="mb-8 py-1 rounded-sm bg-red-200">
-            <p className="text-center text-red-700">{error.message}</p>
+            <p className="text-center text-red-700">{errorSubmit.message}</p>
           </div>
         ) : null}
 

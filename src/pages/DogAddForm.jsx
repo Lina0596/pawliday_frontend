@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
+import { DataContext } from "../context/DataContext";
 import { useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { addDog } from "../api/api";
+import imgUpload from "../api/imagekit";
 import H2 from "../components/styles/H2";
 import ButtonText from "../components/styles/ButtonText";
 import H6 from "../components/styles/H6";
@@ -11,8 +13,12 @@ import ImageCircle from "../components/styles/ImageCircle";
 export default function DogAddForm() {
   const params = useParams();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const { authParams, loadOwnersAndDogs, loading, error } =
+    useContext(DataContext);
+  const [loadingSubmit, setLoadingSubmit] = useState(false);
+  const [errorSubmit, setErrorSubmit] = useState(null);
+  const [imageUrl, setImageUrl] = useState("");
+  const [filePreview, setFilePreview] = useState(null);
 
   const {
     register,
@@ -21,31 +27,48 @@ export default function DogAddForm() {
     formState: { errors },
   } = useForm();
 
-  const preview = watch("img_url");
+  const imgFile = watch("img_url");
+
+  useEffect(() => {
+    if (imgFile && imgFile.length > 0) {
+      const uploadedFile = imgFile[0];
+      const previewUrl = URL.createObjectURL(uploadedFile);
+      setFilePreview(previewUrl);
+      return () => URL.revokeObjectURL(previewUrl);
+    }
+  }, [imgFile]);
 
   const onSubmit = async (data) => {
-    setLoading(true);
+    setLoadingSubmit(true);
     try {
-      const file = data.img_url[0].name;
+      let generatedImgageUrl = "";
+      if (data.img_url && data.img_url.length > 0) {
+        const file = data.img_url[0];
+        generatedImgageUrl = await imgUpload(file, authParams);
+        setImageUrl(generatedImgageUrl);
+      }
       const updatedData = {
         ...data,
-        img_url: file,
+        img_url: generatedImgageUrl,
       };
       console.log(updatedData);
       const res = await addDog(1, params.ownerId, updatedData);
+      await loadOwnersAndDogs();
       const newDogId = res.dog_id;
-      setError(null);
+      setErrorSubmit(null);
       navigate(`/dogs/${newDogId}`);
     } catch (err) {
-      setError(err);
+      setErrorSubmit(err);
     } finally {
-      setLoading(false);
+      setLoadingSubmit(false);
     }
   };
 
-  if (loading) {
+  if (loadingSubmit) {
     return <h1>Loading...</h1>;
   }
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <div className="flex flex-col items-center justify-center">
@@ -54,9 +77,9 @@ export default function DogAddForm() {
 
         <div className="my-8 border-t-4 border-dotted border-[#F0E5C2] w-full"></div>
 
-        {error ? (
+        {errorSubmit ? (
           <div className="mb-8 py-1 rounded-sm bg-red-200">
-            <p className="text-center text-red-700">{error.message}</p>
+            <p className="text-center text-red-700">{errorSubmit.message}</p>
           </div>
         ) : null}
 
@@ -121,7 +144,7 @@ export default function DogAddForm() {
                   required: "Gender is required",
                 })}
               >
-                <option value="" disabled selected hidden>
+                <option value="" disabled hidden>
                   Select gender...
                 </option>
                 <option>male</option>
@@ -216,7 +239,7 @@ export default function DogAddForm() {
                   required: "Character is required",
                 })}
               >
-                <option value="" disabled selected hidden>
+                <option value="" disabled hidden>
                   Select character...
                 </option>
                 <option>sensible</option>
@@ -254,12 +277,7 @@ export default function DogAddForm() {
                 className="hidden"
               />
 
-              {preview && preview[0] && (
-                <ImageCircle
-                  src={URL.createObjectURL(preview[0])}
-                  alt={"preview"}
-                />
-              )}
+              {filePreview && <ImageCircle src={filePreview} alt={"preview"} />}
             </div>
           </div>
 

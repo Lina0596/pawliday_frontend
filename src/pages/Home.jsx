@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <div className="text-center">
       <H1 className="mb-8">Hello {sitter.first_name}!</H1>
-      <TextSection className="w-">
+      <TextSection>
         Lorem ipsum dolor sit amet consectetur. Blandit congue sit sagittis
         cursus netus. Integer elementum eget libero et pellentesque blandit
         pellentesque viverra varius.
