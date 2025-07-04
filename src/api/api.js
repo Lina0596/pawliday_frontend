@@ -65,6 +65,19 @@ export async function updateOwner(sitterId, ownerId, updatedData) {
     return data;
 }
 
+export async function deleteOwner(sitterId, ownerId) {
+    const res = await fetch(`https://pawliday-backend.onrender.com/api/sitters/${sitterId}/owners/${ownerId}`, {
+        method: "DELETE",
+    })
+    if (!res.ok) {
+        const error = await res.json()
+        throw new Error(error.error);
+    }
+    const data = await res.json();
+    console.log(data);
+    return data;
+}
+
 export async function getDogs(sitterId) {
     const res = await fetch(`https://pawliday-backend.onrender.com/api/sitters/${sitterId}/dogs`);
     if (!res.ok) {
@@ -111,6 +124,19 @@ export async function updateDog(sitterId, dogId, updatedData) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(updatedData)
+    })
+    if (!res.ok) {
+        const error = await res.json()
+        throw new Error(error.error);
+    }
+    const data = await res.json();
+    console.log(data);
+    return data;
+}
+
+export async function deleteDog(sitterId, dogId) {
+    const res = await fetch(`https://pawliday-backend.onrender.com/api/sitters/${sitterId}/dogs/${dogId}`, {
+        method: "DELETE",
     })
     if (!res.ok) {
         const error = await res.json()

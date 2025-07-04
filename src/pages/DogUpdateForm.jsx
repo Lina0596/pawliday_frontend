@@ -2,11 +2,12 @@ import { useState, useEffect, useContext } from "react";
 import { DataContext } from "../context/DataContext";
 import { useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { updateDog } from "../api/api";
+import { updateDog, deleteDog } from "../api/api";
 import imgUpload from "../api/imagekit";
 import H2 from "../components/styles/H2";
-import ButtonText from "../components/styles/ButtonText";
 import H6 from "../components/styles/H6";
+import ButtonText from "../components/styles/ButtonText";
+import ButtonDelete from "../components/styles/ButtonTextSecondary";
 import { Upload } from "lucide-react";
 import ImageCircle from "../components/styles/ImageCircle";
 
@@ -20,6 +21,8 @@ export default function DogUpdateForm() {
   const [errorSubmit, setErrorSubmit] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
   const [filePreview, setFilePreview] = useState(null);
+  const [loadingDelete, setLoadingDelete] = useState(false);
+  const [errorDelete, setErrorDelete] = useState(null);
 
   const {
     register,
@@ -27,23 +30,28 @@ export default function DogUpdateForm() {
     watch,
     formState: { errors, dirtyFields },
     getValues,
-  } = useForm({
-    defaultValues: {
-      name: dog.name,
-      chip_id: dog.chip_id,
-      breed: dog.breed,
-      gender: dog.gender,
-      castrated: dog.castrated,
-      birth_date: dog.birth_date,
-      height: dog.height,
-      weight: dog.weight,
-      food_per_day: dog.food_per_day,
-      character: dog.character,
-      sociable: dog.sociable,
-      img_url: dog.img_url,
-      training: dog.training,
-    },
-  });
+    reset,
+  } = useForm();
+
+  useEffect(() => {
+    if (dog) {
+      reset({
+        name: dog.name,
+        chip_id: dog.chip_id,
+        breed: dog.breed,
+        gender: dog.gender,
+        castrated: dog.castrated,
+        birth_date: dog.birth_date,
+        height: dog.height,
+        weight: dog.weight,
+        food_per_day: dog.food_per_day,
+        character: dog.character,
+        sociable: dog.sociable,
+        img_url: dog.img_url,
+        training: dog.training,
+      });
+    }
+  }, [dog, reset]);
 
   const imgFile = watch("img_url");
 
@@ -97,11 +105,27 @@ export default function DogUpdateForm() {
     }
   };
 
+  const handleDeleteDog = async () => {
+    if (!window.confirm("Are you sure you want to delete this dog?")) return;
+    setLoadingDelete(true);
+    try {
+      const res = await deleteDog(1, params.dogId);
+      await loadOwnersAndDogs();
+      setErrorDelete(null);
+      navigate("/owners");
+    } catch (err) {
+      setErrorDelete(err);
+    } finally {
+      setLoadingDelete(false);
+    }
+  };
+
   if (loadingSubmit) {
     return <h1>Loading...</h1>;
   }
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
+  if (errorDelete) return <p>{errorDelete}</p>;
 
   return (
     <div className="flex flex-col items-center justify-center">
@@ -329,6 +353,16 @@ export default function DogUpdateForm() {
           <div className="my-8 border-t-4 border-dotted border-[#F0E5C2] w-full"></div>
 
           <ButtonText className="w-full" text="Save" />
+
+          <div className="my-8 border-t-4 border-dotted border-[#F0E5C2] w-full"></div>
+
+          <div>
+            <ButtonDelete
+              text={loadingDelete ? "Deleting..." : `Delete ${dog.name}`}
+              onClick={handleDeleteDog}
+              disabled={loadingDelete}
+            />
+          </div>
         </form>
       </div>
     </div>

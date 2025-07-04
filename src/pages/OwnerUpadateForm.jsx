@@ -1,10 +1,11 @@
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { useState, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { DataContext } from "../context/DataContext";
 import { useForm } from "react-hook-form";
-import { updateOwner } from "../api/api";
+import { updateOwner, deleteOwner } from "../api/api";
 import H2 from "../components/styles/H2";
 import ButtonText from "../components/styles/ButtonText";
+import ButtonDelete from "../components/styles/ButtonTextSecondary";
 import ImageCircle from "../components/styles/ImageCircle";
 import H6 from "../components/styles/H6";
 import ButtonImage from "../components/styles/ButtonImage";
@@ -18,22 +19,27 @@ export default function OwnerUpadateForm() {
   const owner = owners.find((o) => o.owner_id.toString() === params.ownerId);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [errorSubmit, setErrorSubmit] = useState(null);
-
-  const ownerDogs = dogs.filter((dog) => dog.owner_id === owner.owner_id);
+  const [loadingDelete, setLoadingDelete] = useState(false);
+  const [errorDelete, setErrorDelete] = useState(null);
 
   const {
     register,
     handleSubmit,
     formState: { errors, dirtyFields },
     getValues,
-  } = useForm({
-    defaultValues: {
-      first_name: owner.first_name,
-      last_name: owner.last_name,
-      email: owner.email,
-      phone_number: owner.phone_number,
-    },
-  });
+    reset,
+  } = useForm();
+
+  useEffect(() => {
+    if (owner) {
+      reset({
+        first_name: owner.first_name,
+        last_name: owner.last_name,
+        email: owner.email,
+        phone_number: owner.phone_number,
+      });
+    }
+  }, [owner, reset]);
 
   const onSubmit = async (data) => {
     setLoadingSubmit(true);
@@ -55,11 +61,29 @@ export default function OwnerUpadateForm() {
     }
   };
 
+  const handleDeleteOwner = async () => {
+    if (!window.confirm("Are you sure you want to delete this owner?")) return;
+    setLoadingDelete(true);
+    try {
+      const res = await deleteOwner(1, params.ownerId);
+      await loadOwnersAndDogs();
+      setErrorDelete(null);
+      navigate("/owners");
+    } catch (err) {
+      setErrorDelete(err);
+    } finally {
+      setLoadingDelete(false);
+    }
+  };
+
+  if (loading || !owner) return <p>Loading...</p>;
   if (loadingSubmit) {
     return <h1>Loading...</h1>;
   }
-  if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
+  if (errorDelete) return <p>{errorDelete}</p>;
+
+  const ownerDogs = dogs.filter((dog) => dog.owner_id === owner.owner_id);
 
   return (
     <div className="flex flex-col items-center justify-center">
@@ -156,6 +180,20 @@ export default function OwnerUpadateForm() {
           <div className="my-8 border-t-4 border-dotted border-[#F0E5C2] w-full"></div>
 
           <ButtonText className="w-full" text="Save" />
+
+          <div className="my-8 border-t-4 border-dotted border-[#F0E5C2] w-full"></div>
+
+          <div>
+            <ButtonDelete
+              text={
+                loadingDelete
+                  ? "Deleting..."
+                  : `Delete ${owner.first_name} ${owner.last_name}`
+              }
+              onClick={handleDeleteOwner}
+              disabled={loadingDelete}
+            />
+          </div>
         </form>
       </div>
     </div>
