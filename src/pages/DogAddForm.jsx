@@ -2,23 +2,26 @@ import { useState, useEffect, useContext } from "react";
 import { DataContext } from "../context/DataContext";
 import { useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { addDog } from "../api/api";
+import { addDog, getAuthParams } from "../api/api";
 import imgUpload from "../api/imagekit";
 import H2 from "../components/styles/H2";
 import ButtonText from "../components/styles/ButtonText";
 import H6 from "../components/styles/H6";
 import { Upload } from "lucide-react";
 import ImageCircle from "../components/styles/ImageCircle";
+import LoadingSpinner from "../components/styles/LoadingSpinner";
 
 export default function DogAddForm() {
   const params = useParams();
   const navigate = useNavigate();
-  const { authParams, loadOwnersAndDogs, loading, error } =
-    useContext(DataContext);
+  const { loadOwnersAndDogs, loading, error } = useContext(DataContext);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
+  const [loadingParams, setLoadingParams] = useState(false);
+  const [errorParams, setErrorParams] = useState(null);
   const [errorSubmit, setErrorSubmit] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
   const [filePreview, setFilePreview] = useState(null);
+  const [authParams, setAuthParams] = useState(null);
 
   const {
     register,
@@ -37,6 +40,22 @@ export default function DogAddForm() {
       return () => URL.revokeObjectURL(previewUrl);
     }
   }, [imgFile]);
+
+  useEffect(() => {
+    async function loadAuthParams() {
+      setLoadingParams(true);
+      try {
+        const authParams = await getAuthParams();
+        setAuthParams(authParams);
+      } catch (err) {
+        setErrorParams(err);
+      } finally {
+        await new Promise((res) => setTimeout(res, 1500));
+        setLoadingParams(false);
+      }
+    }
+    loadAuthParams();
+  }, []);
 
   const onSubmit = async (data) => {
     setLoadingSubmit(true);
@@ -60,14 +79,12 @@ export default function DogAddForm() {
     } catch (err) {
       setErrorSubmit(err);
     } finally {
+      await new Promise((res) => setTimeout(res, 1500));
       setLoadingSubmit(false);
     }
   };
 
-  if (loadingSubmit) {
-    return <h1>Loading...</h1>;
-  }
-  if (loading) return <p>Loading...</p>;
+  if (loading || loadingParams || loadingSubmit) return <LoadingSpinner />;
   if (error) return <p>{error}</p>;
 
   return (

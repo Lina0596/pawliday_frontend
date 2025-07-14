@@ -8,6 +8,7 @@ import TextSection from "../components/styles/TextSection";
 import ImageCircleBig from "../components/styles/ImageCircleBig";
 import Pill from "../components/styles/Pill";
 import { Pencil, Mars, Venus } from "lucide-react";
+import LoadingSpinner from "../components/styles/LoadingSpinner";
 
 export default function DogDetail() {
   const params = useParams();
@@ -15,7 +16,7 @@ export default function DogDetail() {
   const dog = dogs.find((d) => d.dog_id.toString() === params.dogId);
   const dogOwner = owners.find((owner) => dog.owner_id === owner.owner_id);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <LoadingSpinner />;
   if (error) return <p>{error}</p>;
 
   return (

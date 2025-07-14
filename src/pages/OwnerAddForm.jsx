@@ -6,12 +6,14 @@ import { addOwner } from "../api/api";
 import H2 from "../components/styles/H2";
 import ButtonText from "../components/styles/ButtonText";
 import H6 from "../components/styles/H6";
+import LoadingSpinner from "../components/styles/LoadingSpinner";
 
 export default function OwnerAddForm() {
   const { loadOwnersAndDogs, loading, error } = useContext(DataContext);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [errorSubmit, setErrorSubmit] = useState(null);
   const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -33,10 +35,7 @@ export default function OwnerAddForm() {
     }
   };
 
-  if (loadingSubmit) {
-    return <h1>Loading...</h1>;
-  }
-  if (loading) return <p>Loading...</p>;
+  if (loading || loadingSubmit) return <LoadingSpinner />;
   if (error) return <p>{error}</p>;
 
   return (

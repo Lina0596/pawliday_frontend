@@ -4,11 +4,12 @@ import { CirclePlus } from "lucide-react";
 import H2 from "../components/styles/H2";
 import CardOne from "../components/CardOne";
 import OwnerCards from "../components/OwnerCards";
+import LoadingSpinner from "../components/styles/LoadingSpinner";
 
 export default function Owners() {
   const { sitter, owners, dogs, loading, error } = useContext(DataContext);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <LoadingSpinner />;
   if (error) return <p>{error}</p>;
 
   return (

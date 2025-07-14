@@ -2,21 +2,24 @@ import { useState, useEffect, useContext } from "react";
 import { DataContext } from "../context/DataContext";
 import { useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { updateDog, deleteDog } from "../api/api";
+import { updateDog, deleteDog, getAuthParams } from "../api/api";
 import imgUpload from "../api/imagekit";
 import H2 from "../components/styles/H2";
 import H6 from "../components/styles/H6";
 import ButtonText from "../components/styles/ButtonText";
-import ButtonDelete from "../components/styles/ButtonTextSecondary";
+import ButtonDelete from "../components/styles/ButtonDelete";
 import { Upload } from "lucide-react";
 import ImageCircle from "../components/styles/ImageCircle";
+import LoadingSpinner from "../components/styles/LoadingSpinner";
 
 export default function DogUpdateForm() {
   const params = useParams();
   const navigate = useNavigate();
-  const { dogs, authParams, loadOwnersAndDogs, loading, error } =
-    useContext(DataContext);
+  const { dogs, loadOwnersAndDogs, loading, error } = useContext(DataContext);
   const dog = dogs.find((d) => d.dog_id.toString() === params.dogId);
+  const [authParams, setAuthParams] = useState(null);
+  const [loadingParams, setLoadingParams] = useState(false);
+  const [errorParams, setErrorParams] = useState(null);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [errorSubmit, setErrorSubmit] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
@@ -67,6 +70,22 @@ export default function DogUpdateForm() {
     }
   }, [imgFile]);
 
+  useEffect(() => {
+    async function loadAuthParams() {
+      setLoadingParams(true);
+      try {
+        const authParams = await getAuthParams();
+        setAuthParams(authParams);
+      } catch (err) {
+        setErrorParams(err);
+      } finally {
+        await new Promise((res) => setTimeout(res, 1500));
+        setLoadingParams(false);
+      }
+    }
+    loadAuthParams();
+  }, []);
+
   const onSubmit = async (data) => {
     setLoadingSubmit(true);
     try {
@@ -101,6 +120,7 @@ export default function DogUpdateForm() {
     } catch (err) {
       setErrorSubmit(err);
     } finally {
+      await new Promise((res) => setTimeout(res, 1500));
       setLoadingSubmit(false);
     }
   };
@@ -116,14 +136,13 @@ export default function DogUpdateForm() {
     } catch (err) {
       setErrorDelete(err);
     } finally {
+      await new Promise((res) => setTimeout(res, 1500));
       setLoadingDelete(false);
     }
   };
 
-  if (loadingSubmit) {
-    return <h1>Loading...</h1>;
-  }
-  if (loading) return <p>Loading...</p>;
+  if (loading || loadingParams || loadingSubmit || !dog)
+    return <LoadingSpinner />;
   if (error) return <p>{error}</p>;
   if (errorDelete) return <p>{errorDelete}</p>;
 
@@ -356,7 +375,7 @@ export default function DogUpdateForm() {
 
           <div className="my-8 border-t-4 border-dotted border-[#F0E5C2] w-full"></div>
 
-          <div>
+          <div className="flex justify-center">
             <ButtonDelete
               text={loadingDelete ? "Deleting..." : `Delete ${dog.name}`}
               onClick={handleDeleteDog}

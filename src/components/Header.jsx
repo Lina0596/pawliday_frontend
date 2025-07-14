@@ -11,11 +11,11 @@ export default function Header() {
         <Logo />
       </Link>
       <div className="flex items-center gap-16">
-        <Link to="owners" className="font-black text-base">
-          Owners
-        </Link>
         <Link to="dogs" className="font-black text-base">
           Dogs
+        </Link>
+        <Link to="owners" className="font-black text-base">
+          Owners
         </Link>
         <Link to="profile">
           <ButtonIcon icon={<UserRound strokeWidth={3} />} />

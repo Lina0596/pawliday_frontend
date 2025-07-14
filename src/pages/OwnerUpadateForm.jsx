@@ -5,11 +5,12 @@ import { useForm } from "react-hook-form";
 import { updateOwner, deleteOwner } from "../api/api";
 import H2 from "../components/styles/H2";
 import ButtonText from "../components/styles/ButtonText";
-import ButtonDelete from "../components/styles/ButtonTextSecondary";
+import ButtonDelete from "../components/styles/ButtonDelete";
 import ImageCircle from "../components/styles/ImageCircle";
 import H6 from "../components/styles/H6";
 import ButtonImage from "../components/styles/ButtonImage";
 import { Plus } from "lucide-react";
+import LoadingSpinner from "../components/styles/LoadingSpinner";
 
 export default function OwnerUpadateForm() {
   const params = useParams();
@@ -76,10 +77,7 @@ export default function OwnerUpadateForm() {
     }
   };
 
-  if (loading || !owner) return <p>Loading...</p>;
-  if (loadingSubmit) {
-    return <h1>Loading...</h1>;
-  }
+  if (loading || loadingSubmit || !owner) return <LoadingSpinner />;
   if (error) return <p>{error}</p>;
   if (errorDelete) return <p>{errorDelete}</p>;
 
@@ -183,7 +181,7 @@ export default function OwnerUpadateForm() {
 
           <div className="my-8 border-t-4 border-dotted border-[#F0E5C2] w-full"></div>
 
-          <div>
+          <div className="flex justify-center">
             <ButtonDelete
               text={
                 loadingDelete

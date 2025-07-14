@@ -6,11 +6,12 @@ import H2 from "../components/styles/H2";
 import ButtonText from "../components/styles/ButtonText";
 import ButtonTextSecondary from "../components/styles/ButtonTextSecondary";
 import H6 from "../components/styles/H6";
+import LoadingSpinner from "../components/styles/LoadingSpinner";
 
 export default function DecisionForm() {
   const { owners, loading, error } = useContext(DataContext);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <LoadingSpinner />;
   if (error) return <p>{error}</p>;
 
   const navigate = useNavigate();
