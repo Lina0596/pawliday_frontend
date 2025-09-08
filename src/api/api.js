@@ -1,5 +1,7 @@
 import Cookies from "js-cookie";
 
+let csrfToken = null;
+
 export async function login(loginData) {
     const res = await fetch(`https://pawliday-backend.onrender.com/api/login`, {
         method: "POST",
@@ -13,6 +15,7 @@ export async function login(loginData) {
     }
     const data = await res.json();
     console.log(data);
+    csrfToken = data.csrf_token;
     return data;
 }
 
@@ -76,8 +79,6 @@ export async function updateSitter(updatedData) {
 }
 
 export async function deleteSitter() {
-    const csrfToken = Cookies.get("csrf_access_token");
-    console.log("CSRF Cookie Value (from js-cookie):", csrfToken);
     const res = await fetch(`https://pawliday-backend.onrender.com/api/sitter/delete`, {
         method: "DELETE",
         credentials: 'include',
