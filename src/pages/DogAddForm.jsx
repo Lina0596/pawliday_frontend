@@ -71,7 +71,7 @@ export default function DogAddForm() {
         img_url: generatedImgageUrl,
       };
       console.log(updatedData);
-      const res = await addDog(1, params.ownerId, updatedData);
+      const res = await addDog(params.ownerId, updatedData);
       await loadOwnersAndDogs();
       const newDogId = res.dog_id;
       setErrorSubmit(null);

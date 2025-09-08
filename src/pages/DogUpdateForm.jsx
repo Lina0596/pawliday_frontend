@@ -113,7 +113,7 @@ export default function DogUpdateForm() {
       };
 
       console.log(updatedData);
-      const res = await updateDog(1, params.dogId, updatedData);
+      const res = await updateDog(params.dogId, updatedData);
       await loadOwnersAndDogs();
       setErrorSubmit(null);
       navigate(`/dogs/${dog.dog_id}`);
@@ -129,7 +129,7 @@ export default function DogUpdateForm() {
     if (!window.confirm("Are you sure you want to delete this dog?")) return;
     setLoadingDelete(true);
     try {
-      const res = await deleteDog(1, params.dogId);
+      const res = await deleteDog(params.dogId);
       await loadOwnersAndDogs();
       setErrorDelete(null);
       navigate("/owners");

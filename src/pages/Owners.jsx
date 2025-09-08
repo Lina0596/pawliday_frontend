@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { DataContext } from "../context/DataContext";
+import { AuthContext } from "../context/AuthContext";
 import { CirclePlus } from "lucide-react";
 import H2 from "../components/styles/H2";
 import CardOne from "../components/CardOne";
@@ -7,7 +8,8 @@ import OwnerCards from "../components/OwnerCards";
 import LoadingSpinner from "../components/styles/LoadingSpinner";
 
 export default function Owners() {
-  const { sitter, owners, dogs, loading, error } = useContext(DataContext);
+  const { owners, dogs, loading, error } = useContext(DataContext);
+  const { user } = useContext(AuthContext);
 
   if (loading) return <LoadingSpinner />;
   if (error) return <p>{error}</p>;
@@ -20,7 +22,7 @@ export default function Owners() {
         <OwnerCards owners={owners} dogs={dogs} />
       ) : (
         <CardOne
-          key={sitter.sitter_id}
+          key={user.sitter_id}
           headline="Add your first 4-legged visitor!"
           text="Lorem ipsum dolor sit amet consectetur.
             Blandit congue sit sagittis cursus netus.

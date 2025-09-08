@@ -13,6 +13,7 @@
     "@imagekit/react": "^5.0.1",
     "@tailwindcss/vite": "^4.1.7",
     "axios": "^1.10.0",
+    "js-cookie": "^3.0.5",
     "lucide-react": "^0.511.0",
     "prop-types": "^15.8.1",
     "react": "^19.0.0",

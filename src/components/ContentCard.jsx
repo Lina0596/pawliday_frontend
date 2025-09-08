@@ -6,6 +6,7 @@ import cozyDog from "../assets/images/cozyDog.png";
 import { CircleArrowRight } from "lucide-react";
 
 export default function ContentCard({ dogs }) {
+  console.log("Dogs: ", dogs);
   return (
     <div className="flex flex-col md:flex-row-reverse h-auto md:h-80 rounded-sm text-left bg-[#F9F3E1]">
       <img

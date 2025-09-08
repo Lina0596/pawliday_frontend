@@ -51,7 +51,7 @@ export default function OwnerUpadateForm() {
         updatedData[key] = allValues[key];
       }
       console.log(updatedData);
-      const res = await updateOwner(1, params.ownerId, updatedData);
+      const res = await updateOwner(params.ownerId, updatedData);
       await loadOwnersAndDogs();
       setErrorSubmit(null);
       navigate("/owners");
@@ -66,7 +66,7 @@ export default function OwnerUpadateForm() {
     if (!window.confirm("Are you sure you want to delete this owner?")) return;
     setLoadingDelete(true);
     try {
-      const res = await deleteOwner(1, params.ownerId);
+      const res = await deleteOwner(params.ownerId);
       await loadOwnersAndDogs();
       setErrorDelete(null);
       navigate("/owners");

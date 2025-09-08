@@ -1,40 +1,25 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import { getSitter, getOwners, getDogs, getAuthParams } from "../api/api";
+import { AuthContext } from "./AuthContext";
 
 export const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
   // States
+  const { user, isAuthenticated } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [sitter, setSitter] = useState([]);
   const [owners, setOwners] = useState([]);
   const [dogs, setDogs] = useState([]);
   const [authParams, setAuthParams] = useState(null);
-
-  // Fetch sitter
-  useEffect(() => {
-    async function loadSitter() {
-      setLoading(true);
-      try {
-        const sitter = await getSitter(1);
-        setSitter(sitter);
-      } catch (err) {
-        setError(err);
-      } finally {
-        await new Promise((res) => setTimeout(res, 1500));
-        setLoading(false);
-      }
-    }
-    loadSitter();
-  }, []);
+  console.log("Error DataContext: ", error);
 
   // Fetch owners, dogs
   async function loadOwnersAndDogs() {
     setLoading(true);
     try {
-      const owners = await getOwners(sitter.sitter_id);
-      const dogs = await getDogs(sitter.sitter_id);
+      const owners = await getOwners();
+      const dogs = await getDogs();
       setOwners(owners);
       setDogs(dogs);
     } catch (err) {
@@ -46,9 +31,9 @@ export const DataProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    if (!sitter.sitter_id) return;
+    if (!user?.sitter_id) return;
     loadOwnersAndDogs();
-  }, [sitter.sitter_id]);
+  }, [isAuthenticated, user?.sitter_id]);
 
   useEffect(() => {
     async function loadAuthParams() {
@@ -70,7 +55,6 @@ export const DataProvider = ({ children }) => {
   return (
     <DataContext.Provider
       value={{
-        sitter,
         owners,
         dogs,
         authParams,
