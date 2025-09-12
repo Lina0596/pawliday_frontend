@@ -2,7 +2,6 @@ import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import ButtonIcon from "./styles/ButtonIcon";
-import ButtonText from "./styles/ButtonText";
 import ButtonTextIcon from "./styles/ButtonTextIcon";
 import Logo from "./styles/Logo";
 import { UserRound, LogIn } from "lucide-react";

@@ -9,7 +9,7 @@ import H6 from "../components/styles/H6";
 import LoadingSpinner from "../components/styles/LoadingSpinner";
 
 export default function OwnerAddForm() {
-  const { loadOwnersAndDogs, loading, error } = useContext(DataContext);
+  const { loadOwnersAndDogs, loading } = useContext(DataContext);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [errorSubmit, setErrorSubmit] = useState(null);
   const navigate = useNavigate();
@@ -36,7 +36,6 @@ export default function OwnerAddForm() {
   };
 
   if (loading || loadingSubmit) return <LoadingSpinner />;
-  if (error) return <p>{error}</p>;
 
   return (
     <div className="flex flex-col items-center justify-center">

@@ -1,4 +1,3 @@
-import React from "react";
 import Lottie from "react-lottie";
 import animationData from "../../assets/lotties/dogLoadingSpinner.json";
 import H6 from "./H6";

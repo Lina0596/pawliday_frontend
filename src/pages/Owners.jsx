@@ -8,11 +8,10 @@ import OwnerCards from "../components/OwnerCards";
 import LoadingSpinner from "../components/styles/LoadingSpinner";
 
 export default function Owners() {
-  const { owners, dogs, loading, error } = useContext(DataContext);
+  const { owners, dogs, loading } = useContext(DataContext);
   const { user } = useContext(AuthContext);
 
   if (loading) return <LoadingSpinner />;
-  if (error) return <p>{error}</p>;
 
   return (
     <div>

@@ -7,18 +7,16 @@ import LoadingSpinner from "../components/styles/LoadingSpinner";
 import ContentCard from "../components/ContentCard";
 
 export default function Home() {
-  const { user, isAuthenticated, deleteMessage } = useContext(AuthContext);
-  const { dogs, loading, error } = useContext(DataContext);
-  console.log(dogs.length);
+  const { user, isAuthenticated } = useContext(AuthContext);
+  const { dogs, loading } = useContext(DataContext);
 
   if (loading) return <LoadingSpinner />;
-  if (error) return <p>{error.message}</p>;
 
   return (
     <div className="flex flex-col items-center">
       <div className="mb-20 text-center w-140">
         <H1 className="mb-8">
-          Hello {isAuthenticated ? user.first_name : "Doglover"}!
+          Hello {isAuthenticated && user ? user.first_name : "Doglover"}!
         </H1>
         <TextSection>
           Lorem ipsum dolor sit amet consectetur. Blandit congue sit sagittis
@@ -26,7 +24,7 @@ export default function Home() {
           pellentesque viverra varius.
         </TextSection>
       </div>
-      {isAuthenticated ? <ContentCard dogs={dogs} /> : null}
+      {isAuthenticated && user ? <ContentCard dogs={dogs} /> : null}
     </div>
   );
 }

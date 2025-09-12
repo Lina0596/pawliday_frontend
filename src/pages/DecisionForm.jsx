@@ -9,10 +9,9 @@ import H6 from "../components/styles/H6";
 import LoadingSpinner from "../components/styles/LoadingSpinner";
 
 export default function DecisionForm() {
-  const { owners, loading, error } = useContext(DataContext);
+  const { owners, loading } = useContext(DataContext);
 
   if (loading) return <LoadingSpinner />;
-  if (error) return <p>{error}</p>;
 
   const navigate = useNavigate();
 

@@ -12,7 +12,6 @@ export const DataProvider = ({ children }) => {
   const [owners, setOwners] = useState([]);
   const [dogs, setDogs] = useState([]);
   const [authParams, setAuthParams] = useState(null);
-  console.log("Error DataContext: ", error);
 
   // Fetch owners, dogs
   async function loadOwnersAndDogs() {
@@ -34,6 +33,13 @@ export const DataProvider = ({ children }) => {
     if (!user?.sitter_id) return;
     loadOwnersAndDogs();
   }, [isAuthenticated, user?.sitter_id]);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setDogs([]);
+      setOwners([]);
+    }
+  }, [isAuthenticated]);
 
   useEffect(() => {
     async function loadAuthParams() {

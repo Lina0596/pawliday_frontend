@@ -1,21 +1,17 @@
-import { useState, useContext } from "react";
+import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import H2 from "../components/styles/H2";
-import ButtonText from "../components/styles/ButtonText";
 import H6 from "../components/styles/H6";
+import ButtonText from "../components/styles/ButtonText";
+import ButtonTextSecondary from "../components/styles/ButtonTextSecondary";
+import LoadingSpinner from "../components/styles/LoadingSpinner";
+import ErrorMessage from "../components/styles/ErrorMessage";
 
 export default function Registration() {
-  const {
-    fetchRegistration,
-    registrationLoading,
-    registrationMessage,
-    registrationError,
-  } = useContext(AuthContext);
-
-  const navigate = useNavigate();
+  const { authLoading, fetchRegistration, status, clearStatus } =
+    useContext(AuthContext);
 
   const {
     register,
@@ -27,22 +23,20 @@ export default function Registration() {
     await fetchRegistration(newData);
   };
 
-  if (registrationMessage) {
-    return <Navigate to="/login" replace />;
+  if (authLoading) return <LoadingSpinner />;
+
+  if (status?.action === "registration" && status?.type == "success") {
+    return <Navigate to="/login" replace state={status} />;
   }
 
   return (
     <div className="flex flex-col items-center justify-center">
+      {status?.action === "registration" && status?.type === "error" ? (
+        <ErrorMessage>{status.message}</ErrorMessage>
+      ) : null}
+
       <div className="w-140">
         <H2 className="text-center">Create your account</H2>
-
-        {registrationError ? (
-          <div className="my-8 py-1 rounded-sm bg-red-200">
-            <p className="text-center text-red-700">
-              {registrationError.message}
-            </p>
-          </div>
-        ) : null}
 
         <div className="my-8 border-t-4 border-dotted border-[#F0E5C2] w-full"></div>
 
@@ -59,8 +53,9 @@ export default function Registration() {
                 required: "First name is required",
               })}
               placeholder="First name"
+              onChange={() => clearStatus()}
             />
-            <p className="mt-1">{errors.first_name?.message}</p>
+            <p className="mt-1 text-[#E84D19]">{errors.first_name?.message}</p>
           </div>
 
           <div className="mb-8">
@@ -75,8 +70,9 @@ export default function Registration() {
                 required: "Last name is required",
               })}
               placeholder="Last name"
+              onChange={() => clearStatus()}
             />
-            <p className="mt-1">{errors.last_name?.message}</p>
+            <p className="mt-1 text-[#E84D19]">{errors.last_name?.message}</p>
           </div>
 
           <div className="mb-8">
@@ -91,8 +87,9 @@ export default function Registration() {
                 required: "Email is required",
               })}
               placeholder="Email"
+              onChange={() => clearStatus()}
             />
-            <p className="mt-1">{errors.email?.message}</p>
+            <p className="mt-1 text-[#E84D19]">{errors.email?.message}</p>
           </div>
 
           <div className="mb-8">
@@ -105,13 +102,16 @@ export default function Registration() {
               type="password"
               {...register("password", { required: "Password is required" })}
               placeholder="Password"
+              onChange={() => clearStatus()}
             />
-            <p className="mt-1">{errors.password?.message}</p>
+            <p className="mt-1 text-[#E84D19]">{errors.password?.message}</p>
           </div>
-
-          <div className="my-8 border-t-4 border-dotted border-[#F0E5C2] w-full"></div>
           <ButtonText className="w-full" text="Create account" />
         </form>
+        <div className="my-8 border-t-4 border-dotted border-[#F0E5C2] w-full"></div>
+        <Link to={"/login"}>
+          <ButtonTextSecondary className="w-full" text="Login" />
+        </Link>
       </div>
     </div>
   );

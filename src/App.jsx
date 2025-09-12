@@ -18,9 +18,9 @@ import DecisionForm from "./pages/DecisionForm";
 
 export default function App() {
   return (
-    <AuthProvider>
-      <DataProvider>
-        <BrowserRouter>
+    <BrowserRouter>
+      <AuthProvider>
+        <DataProvider>
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route path="login" element={<Login />} />
@@ -42,8 +42,8 @@ export default function App() {
               </Route>
             </Route>
           </Routes>
-        </BrowserRouter>
-      </DataProvider>
-    </AuthProvider>
+        </DataProvider>
+      </AuthProvider>
+    </BrowserRouter>
   );
 }

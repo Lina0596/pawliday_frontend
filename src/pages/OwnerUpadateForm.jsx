@@ -14,8 +14,7 @@ import LoadingSpinner from "../components/styles/LoadingSpinner";
 
 export default function OwnerUpadateForm() {
   const params = useParams();
-  const { owners, dogs, loadOwnersAndDogs, loading, error } =
-    useContext(DataContext);
+  const { owners, dogs, loadOwnersAndDogs, loading } = useContext(DataContext);
   const navigate = useNavigate();
   const owner = owners.find((o) => o.owner_id.toString() === params.ownerId);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
@@ -78,8 +77,7 @@ export default function OwnerUpadateForm() {
   };
 
   if (loading || loadingSubmit || !owner) return <LoadingSpinner />;
-  if (error) return <p>{error}</p>;
-  if (errorDelete) return <p>{errorDelete}</p>;
+  if (errorDelete) return <p>{errorDelete.message}</p>;
 
   const ownerDogs = dogs.filter((dog) => dog.owner_id === owner.owner_id);
 

@@ -15,7 +15,7 @@ import LoadingSpinner from "../components/styles/LoadingSpinner";
 export default function DogUpdateForm() {
   const params = useParams();
   const navigate = useNavigate();
-  const { dogs, loadOwnersAndDogs, loading, error } = useContext(DataContext);
+  const { dogs, loadOwnersAndDogs, loading } = useContext(DataContext);
   const dog = dogs.find((d) => d.dog_id.toString() === params.dogId);
   const [authParams, setAuthParams] = useState(null);
   const [loadingParams, setLoadingParams] = useState(false);
@@ -143,7 +143,6 @@ export default function DogUpdateForm() {
 
   if (loading || loadingParams || loadingSubmit || !dog)
     return <LoadingSpinner />;
-  if (error) return <p>{error}</p>;
   if (errorDelete) return <p>{errorDelete}</p>;
 
   return (
