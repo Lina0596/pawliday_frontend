@@ -14,7 +14,7 @@ import LoadingSpinner from "../components/styles/LoadingSpinner";
 export default function DogAddForm() {
   const params = useParams();
   const navigate = useNavigate();
-  const { loadOwnersAndDogs, loading } = useContext(DataContext);
+  const { fetchOwnersAndDogs, loading } = useContext(DataContext);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [loadingParams, setLoadingParams] = useState(false);
   const [errorParams, setErrorParams] = useState(null);
@@ -72,7 +72,7 @@ export default function DogAddForm() {
       };
       console.log(updatedData);
       const res = await addDog(params.ownerId, updatedData);
-      await loadOwnersAndDogs();
+      await fetchOwnersAndDogs();
       const newDogId = res.dog_id;
       setErrorSubmit(null);
       navigate(`/dogs/${newDogId}`);

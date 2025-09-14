@@ -9,9 +9,9 @@ import H6 from "../components/styles/H6";
 import LoadingSpinner from "../components/styles/LoadingSpinner";
 
 export default function DecisionForm() {
-  const { owners, loading } = useContext(DataContext);
+  const { dataLoading, owners } = useContext(DataContext);
 
-  if (loading) return <LoadingSpinner />;
+  if (dataLoading) return <LoadingSpinner />;
 
   const navigate = useNavigate();
 
@@ -22,7 +22,6 @@ export default function DecisionForm() {
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
     navigate(`/dogs/add/${data.owner}`);
   };
 

@@ -12,11 +12,11 @@ import LoadingSpinner from "../components/styles/LoadingSpinner";
 
 export default function DogDetail() {
   const params = useParams();
-  const { owners, dogs, loading } = useContext(DataContext);
+  const { owners, dogs, dataLoading } = useContext(DataContext);
   const dog = dogs.find((d) => d.dog_id.toString() === params.dogId);
   const dogOwner = owners.find((owner) => dog.owner_id === owner.owner_id);
 
-  if (loading) return <LoadingSpinner />;
+  if (dataLoading) return <LoadingSpinner />;
 
   return (
     <div className="flex items-center justify-center min-h-screen -my-20">

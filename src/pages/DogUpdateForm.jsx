@@ -31,7 +31,7 @@ export default function DogUpdateForm() {
     register,
     handleSubmit,
     watch,
-    formState: { errors, dirtyFields },
+    formState: { errors },
     getValues,
     reset,
   } = useForm();
