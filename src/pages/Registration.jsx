@@ -25,7 +25,7 @@ export default function Registration() {
 
   if (authLoading) return <LoadingSpinner />;
 
-  if (status?.action === "registration" && status?.type == "success") {
+  if (status?.action === "registration" && status?.type === "success") {
     return <Navigate to="/login" replace state={status} />;
   }
 

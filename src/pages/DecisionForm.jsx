@@ -11,8 +11,6 @@ import LoadingSpinner from "../components/styles/LoadingSpinner";
 export default function DecisionForm() {
   const { dataLoading, owners } = useContext(DataContext);
 
-  if (dataLoading) return <LoadingSpinner />;
-
   const navigate = useNavigate();
 
   const {
@@ -21,9 +19,11 @@ export default function DecisionForm() {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
+  const handleDecision = (data) => {
     navigate(`/dogs/add/${data.owner}`);
   };
+
+  if (dataLoading || !owners) return <LoadingSpinner />;
 
   return (
     <div className="flex flex-col items-center justify-center">
@@ -32,7 +32,7 @@ export default function DecisionForm() {
 
         <div className="my-8 border-t-4 border-dotted border-[#F0E5C2] w-full"></div>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(handleDecision)}>
           <label htmlFor="owner">
             <H6 className="mb-4">Choose existing owner</H6>
           </label>
@@ -53,7 +53,7 @@ export default function DecisionForm() {
                 </option>
               ))}
             </select>
-            <p className="mt-1">{errors.owner?.message}</p>
+            <p className="mt-1 text-[#E84D19]">{errors.owner?.message}</p>
           </div>
           <ButtonText className="w-full" text="Continue to add a dog" />
         </form>

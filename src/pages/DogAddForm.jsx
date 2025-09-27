@@ -1,27 +1,34 @@
 import { useState, useEffect, useContext } from "react";
 import { DataContext } from "../context/DataContext";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { addDog, getAuthParams } from "../api/api";
-import imgUpload from "../api/imagekit";
 import H2 from "../components/styles/H2";
 import ButtonText from "../components/styles/ButtonText";
 import H6 from "../components/styles/H6";
 import { Upload } from "lucide-react";
 import ImageCircle from "../components/styles/ImageCircle";
 import LoadingSpinner from "../components/styles/LoadingSpinner";
+import ErrorMessage from "../components/styles/ErrorMessage";
+import SuccessMessage from "../components/styles/SuccessMessage";
 
 export default function DogAddForm() {
   const params = useParams();
   const navigate = useNavigate();
-  const { fetchOwnersAndDogs, loading } = useContext(DataContext);
-  const [loadingSubmit, setLoadingSubmit] = useState(false);
-  const [loadingParams, setLoadingParams] = useState(false);
-  const [errorParams, setErrorParams] = useState(null);
-  const [errorSubmit, setErrorSubmit] = useState(null);
-  const [imageUrl, setImageUrl] = useState("");
   const [filePreview, setFilePreview] = useState(null);
-  const [authParams, setAuthParams] = useState(null);
+  const { dataLoading, fetchAddDog, dataStatus, clearDataStatus } =
+    useContext(DataContext);
+  const [newDogId, setNewDogId] = useState(null);
+
+  const location = useLocation();
+  const locationStatus = location.state;
+
+  const activeStatus = dataStatus?.type
+    ? dataStatus
+    : locationStatus?.type
+    ? locationStatus
+    : null;
+
+  console.log(activeStatus);
 
   const {
     register,
@@ -41,65 +48,42 @@ export default function DogAddForm() {
     }
   }, [imgFile]);
 
-  useEffect(() => {
-    async function loadAuthParams() {
-      setLoadingParams(true);
-      try {
-        const authParams = await getAuthParams();
-        setAuthParams(authParams);
-      } catch (err) {
-        setErrorParams(err);
-      } finally {
-        await new Promise((res) => setTimeout(res, 1500));
-        setLoadingParams(false);
-      }
-    }
-    loadAuthParams();
-  }, []);
-
-  const onSubmit = async (data) => {
-    setLoadingSubmit(true);
-    try {
-      let generatedImgageUrl = "";
-      if (data.img_url && data.img_url.length > 0) {
-        const file = data.img_url[0];
-        generatedImgageUrl = await imgUpload(file, authParams);
-        setImageUrl(generatedImgageUrl);
-      }
-      const updatedData = {
-        ...data,
-        img_url: generatedImgageUrl,
-      };
-      console.log(updatedData);
-      const res = await addDog(params.ownerId, updatedData);
-      await fetchOwnersAndDogs();
-      const newDogId = res.dog_id;
-      setErrorSubmit(null);
-      navigate(`/dogs/${newDogId}`);
-    } catch (err) {
-      setErrorSubmit(err);
-    } finally {
-      await new Promise((res) => setTimeout(res, 1500));
-      setLoadingSubmit(false);
-    }
+  const handleAddDog = async (newData) => {
+    const newDog = await fetchAddDog(params.ownerId, newData);
+    setNewDogId(newDog.dog_id);
   };
 
-  if (loading || loadingParams || loadingSubmit) return <LoadingSpinner />;
+  useEffect(() => {
+    if (
+      !dataLoading &&
+      dataStatus?.action === "add dog" &&
+      dataStatus?.type === "success" &&
+      dataStatus?.message &&
+      newDogId
+    ) {
+      navigate(`/dogs/${newDogId}`, { state: dataStatus });
+    }
+  }, [dataLoading, dataStatus, newDogId, navigate]);
+
+  if (dataLoading) return <LoadingSpinner />;
 
   return (
     <div className="flex flex-col items-center justify-center">
+      {activeStatus?.action === "add dog" && activeStatus?.type === "error" ? (
+        <ErrorMessage>{activeStatus.message}</ErrorMessage>
+      ) : null}
+
+      {activeStatus?.action === "add owner" &&
+      activeStatus?.type === "success" ? (
+        <SuccessMessage>{activeStatus.message}</SuccessMessage>
+      ) : null}
+
       <div className="w-140">
         <H2 className="text-center">Add a dog</H2>
 
         <div className="my-8 border-t-4 border-dotted border-[#F0E5C2] w-full"></div>
 
-        {errorSubmit ? (
-          <div className="mb-8 py-1 rounded-sm bg-red-200">
-            <p className="text-center text-red-700">{errorSubmit.message}</p>
-          </div>
-        ) : null}
-
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(handleAddDog)}>
           <div className="mb-8">
             <label htmlFor="name">
               <H6 className="mb-4">Name</H6>
@@ -112,8 +96,9 @@ export default function DogAddForm() {
                 required: "Name is required",
               })}
               placeholder="Name"
+              onChange={() => clearDataStatus()}
             />
-            <p className="mt-1">{errors.name?.message}</p>
+            <p className="mt-1 text-[#E84D19]">{errors.name?.message}</p>
           </div>
 
           <div className="mb-8">
@@ -128,8 +113,9 @@ export default function DogAddForm() {
                 required: "Chip Id is required",
               })}
               placeholder="Chip Id"
+              onChange={() => clearDataStatus()}
             />
-            <p className="mt-1">{errors.chip_id?.message}</p>
+            <p className="mt-1 text-[#E84D19]">{errors.chip_id?.message}</p>
           </div>
 
           <div className="mb-8">
@@ -144,8 +130,9 @@ export default function DogAddForm() {
                 required: "Breed is required",
               })}
               placeholder="Breed"
+              onChange={() => clearDataStatus()}
             />
-            <p className="mt-1">{errors.breed?.message}</p>
+            <p className="mt-1 text-[#E84D19]">{errors.breed?.message}</p>
           </div>
 
           <div className="mb-8">
@@ -176,7 +163,7 @@ export default function DogAddForm() {
                 <p>castrated</p>
               </label>
             </div>
-            <p className="mt-1">{errors.gender?.message}</p>
+            <p className="mt-1 text-[#E84D19]">{errors.gender?.message}</p>
           </div>
 
           <div className="mb-8">
@@ -191,8 +178,9 @@ export default function DogAddForm() {
                 required: "Birth date is required",
               })}
               placeholder="Birth date"
+              onChange={() => clearDataStatus()}
             />
-            <p className="mt-1">{errors.birth_date?.message}</p>
+            <p className="mt-1 text-[#E84D19]">{errors.birth_date?.message}</p>
           </div>
 
           <div className="mb-8">
@@ -207,8 +195,9 @@ export default function DogAddForm() {
                 required: "Height is required",
               })}
               placeholder="Height"
+              onChange={() => clearDataStatus()}
             />
-            <p className="mt-1">{errors.height?.message}</p>
+            <p className="mt-1 text-[#E84D19]">{errors.height?.message}</p>
           </div>
 
           <div className="mb-8">
@@ -223,8 +212,9 @@ export default function DogAddForm() {
                 required: "Weight is required",
               })}
               placeholder="Weight"
+              onChange={() => clearDataStatus()}
             />
-            <p className="mt-1">{errors.weight?.message}</p>
+            <p className="mt-1 text-[#E84D19]">{errors.weight?.message}</p>
           </div>
 
           <div className="mb-8">
@@ -239,8 +229,11 @@ export default function DogAddForm() {
                 required: "Food per day is required",
               })}
               placeholder="Food per day"
+              onChange={() => clearDataStatus()}
             />
-            <p className="mt-1">{errors.food_per_day?.message}</p>
+            <p className="mt-1 text-[#E84D19]">
+              {errors.food_per_day?.message}
+            </p>
           </div>
 
           <div className="mb-8">
@@ -273,7 +266,7 @@ export default function DogAddForm() {
                 <p className="mb-1">sociable</p>
               </label>
             </div>
-            <p className="mt-1">{errors.character?.message}</p>
+            <p className="mt-1 text-[#E84D19]">{errors.character?.message}</p>
           </div>
 
           <div className="mb-8">

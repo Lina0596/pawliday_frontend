@@ -132,6 +132,7 @@ export async function getOwner(ownerId) {
 }
 
 export async function addOwner(newData) {
+    console.log("New Data", newData)
     const res = await fetch(`https://pawliday-backend.onrender.com/api/sitters/owners/add`, {
         method: "POST",
         credentials: "include",
@@ -146,7 +147,8 @@ export async function addOwner(newData) {
     if (data.csrf_token) {
         csrfToken = data.csrf_token;
     }
-    return data.owner;
+    console.log("Data", data)
+    return {"owner": data.owner, "message": data.message};
 }
 
 export async function updateOwner(ownerId, updatedData) {
@@ -164,7 +166,7 @@ export async function updateOwner(ownerId, updatedData) {
     if (data.csrf_token) {
         csrfToken = data.csrf_token;
     }
-    return data.message;
+    return {"owner": data.owner, "message": data.message};
 }
 
 export async function deleteOwner(ownerId) {
@@ -233,7 +235,7 @@ export async function addDog(ownerId, newData) {
     if (data.csrf_token) {
         csrfToken = data.csrf_token;
     }
-    return data.dog;
+    return {"dog": data.dog, "message": data.message};
 }
 
 export async function updateDog(dogId, updatedData) {
@@ -251,7 +253,7 @@ export async function updateDog(dogId, updatedData) {
     if (data.csrf_token) {
         csrfToken = data.csrf_token;
     }
-    return data.message;
+    return {"dog": data.dog, "message": data.message};
 }
 
 export async function deleteDog(dogId) {

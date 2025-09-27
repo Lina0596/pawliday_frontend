@@ -12,7 +12,7 @@ export default function Home() {
   const { user, isAuthenticated } = useContext(AuthContext);
   const { dogs, dataLoading } = useContext(DataContext);
 
-  if (dataLoading) return <LoadingSpinner />;
+  if (dataLoading || !dogs) return <LoadingSpinner />;
 
   return isAuthenticated && user ? (
     <div className="flex flex-col items-center">

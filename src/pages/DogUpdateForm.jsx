@@ -1,9 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { DataContext } from "../context/DataContext";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Navigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { updateDog, deleteDog, getAuthParams } from "../api/api";
-import imgUpload from "../api/imagekit";
 import H2 from "../components/styles/H2";
 import H6 from "../components/styles/H6";
 import ButtonText from "../components/styles/ButtonText";
@@ -11,28 +9,29 @@ import ButtonDelete from "../components/styles/ButtonDelete";
 import { Upload } from "lucide-react";
 import ImageCircle from "../components/styles/ImageCircle";
 import LoadingSpinner from "../components/styles/LoadingSpinner";
+import ErrorMessage from "../components/styles/ErrorMessage";
+import SuccessMessage from "../components/styles/SuccessMessage";
 
 export default function DogUpdateForm() {
+  const {
+    dogs,
+    fetchUpdateDog,
+    fetchDeleteDog,
+    dataLoading,
+    dataStatus,
+    clearDataStatus,
+  } = useContext(DataContext);
   const params = useParams();
   const navigate = useNavigate();
-  const { dogs, loadOwnersAndDogs, loading } = useContext(DataContext);
-  const dog = dogs.find((d) => d.dog_id.toString() === params.dogId);
-  const [authParams, setAuthParams] = useState(null);
-  const [loadingParams, setLoadingParams] = useState(false);
-  const [errorParams, setErrorParams] = useState(null);
-  const [loadingSubmit, setLoadingSubmit] = useState(false);
-  const [errorSubmit, setErrorSubmit] = useState(null);
-  const [imageUrl, setImageUrl] = useState("");
   const [filePreview, setFilePreview] = useState(null);
-  const [loadingDelete, setLoadingDelete] = useState(false);
-  const [errorDelete, setErrorDelete] = useState(null);
+  const dog = dogs.find((d) => d.dog_id.toString() === params.dogId);
+  const [updatedDog, setUpdatedDog] = useState(null);
 
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
-    getValues,
     reset,
   } = useForm();
 
@@ -70,95 +69,57 @@ export default function DogUpdateForm() {
     }
   }, [imgFile]);
 
-  useEffect(() => {
-    async function loadAuthParams() {
-      setLoadingParams(true);
-      try {
-        const authParams = await getAuthParams();
-        setAuthParams(authParams);
-      } catch (err) {
-        setErrorParams(err);
-      } finally {
-        await new Promise((res) => setTimeout(res, 1500));
-        setLoadingParams(false);
-      }
-    }
-    loadAuthParams();
-  }, []);
-
-  const onSubmit = async (data) => {
-    setLoadingSubmit(true);
-    try {
-      // const updatedData = {};
-      // const allValues = getValues();
-      // for (const key in dirtyFields) {
-      //   updatedData[key] = allValues[key];
-      // }
-      let generatedImgageUrl = "";
-      if (
-        data.img_url &&
-        data.img_url.length > 0 &&
-        imgFile[0] instanceof File
-      ) {
-        const file = data.img_url[0];
-        generatedImgageUrl = await imgUpload(file, authParams);
-        // updatedData.img_url = generatedImgageUrl;
-      } else {
-        generatedImgageUrl = dog.img_url;
-      }
-
-      const updatedData = {
-        ...data,
-        img_url: generatedImgageUrl,
-      };
-
-      console.log(updatedData);
-      const res = await updateDog(params.dogId, updatedData);
-      await loadOwnersAndDogs();
-      setErrorSubmit(null);
-      navigate(`/dogs/${dog.dog_id}`);
-    } catch (err) {
-      setErrorSubmit(err);
-    } finally {
-      await new Promise((res) => setTimeout(res, 1500));
-      setLoadingSubmit(false);
-    }
+  const handleUpdateDog = async (updatedData) => {
+    const updatedDog = await fetchUpdateDog(
+      dog,
+      imgFile,
+      params.dogId,
+      updatedData
+    );
+    setUpdatedDog(updatedDog);
   };
 
   const handleDeleteDog = async () => {
     if (!window.confirm("Are you sure you want to delete this dog?")) return;
-    setLoadingDelete(true);
-    try {
-      const res = await deleteDog(params.dogId);
-      await loadOwnersAndDogs();
-      setErrorDelete(null);
-      navigate("/owners");
-    } catch (err) {
-      setErrorDelete(err);
-    } finally {
-      await new Promise((res) => setTimeout(res, 1500));
-      setLoadingDelete(false);
-    }
+    await fetchDeleteDog(params.dogId);
   };
 
-  if (loading || loadingParams || loadingSubmit || !dog)
-    return <LoadingSpinner />;
-  if (errorDelete) return <p>{errorDelete}</p>;
+  useEffect(() => {
+    if (
+      !dataLoading &&
+      dataStatus?.action === "update dog" &&
+      dataStatus?.type === "success" &&
+      dataStatus?.message &&
+      updatedDog
+    ) {
+      navigate(`/dogs/${dog.dog_id}`, { state: dataStatus });
+    }
+  }, [dataLoading, dataStatus, updatedDog, navigate]);
+
+  if (dataStatus?.action === "delete dog" && dataStatus?.type === "success") {
+    return <Navigate to="/dogs" state={dataStatus} />;
+  }
+
+  if (dataLoading || !dog) return <LoadingSpinner />;
 
   return (
     <div className="flex flex-col items-center justify-center">
+      {(dataStatus?.action === "update dog" ||
+        dataStatus?.action === "delete dog") &&
+      dataStatus?.type === "error" ? (
+        <ErrorMessage>{dataStatus.message}</ErrorMessage>
+      ) : null}
+
+      {dataStatus?.action === "update dog" && dataStatus?.type === "success" ? (
+        <SuccessMessage>{dataStatus.message}</SuccessMessage>
+      ) : null}
+
       <div className="w-140">
         <H2 className="text-center">{`${dog.name}`}</H2>
 
         <div className="my-8 border-t-4 border-dotted border-[#F0E5C2] w-full"></div>
 
-        {errorSubmit ? (
-          <div className="mb-8 py-1 rounded-sm bg-red-200">
-            <p className="text-center text-red-700">{errorSubmit.message}</p>
-          </div>
-        ) : null}
-
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(handleUpdateDog)}>
           <div className="mb-8">
             <label htmlFor="name">
               <H6 className="mb-4">Name</H6>
@@ -171,8 +132,9 @@ export default function DogUpdateForm() {
                 required: "Name is required",
               })}
               placeholder="Name"
+              onChange={() => clearDataStatus()}
             />
-            <p className="mt-1">{errors.name?.message}</p>
+            <p className="mt-1 text-[#E84D19]">{errors.name?.message}</p>
           </div>
 
           <div className="mb-8">
@@ -187,8 +149,9 @@ export default function DogUpdateForm() {
                 required: "Chip Id is required",
               })}
               placeholder="Chip Id"
+              onChange={() => clearDataStatus()}
             />
-            <p className="mt-1">{errors.chip_id?.message}</p>
+            <p className="mt-1 text-[#E84D19]">{errors.chip_id?.message}</p>
           </div>
 
           <div className="mb-8">
@@ -203,8 +166,9 @@ export default function DogUpdateForm() {
                 required: "Breed is required",
               })}
               placeholder="Breed"
+              onChange={() => clearDataStatus()}
             />
-            <p className="mt-1">{errors.breed?.message}</p>
+            <p className="mt-1 text-[#E84D19]">{errors.breed?.message}</p>
           </div>
 
           <div className="mb-8">
@@ -235,7 +199,7 @@ export default function DogUpdateForm() {
                 <p>castrated</p>
               </label>
             </div>
-            <p className="mt-1">{errors.gender?.message}</p>
+            <p className="mt-1 text-[#E84D19]">{errors.gender?.message}</p>
           </div>
 
           <div className="mb-8">
@@ -250,8 +214,9 @@ export default function DogUpdateForm() {
                 required: "Birth date is required",
               })}
               placeholder="Birth date"
+              onChange={() => clearDataStatus()}
             />
-            <p className="mt-1">{errors.birth_date?.message}</p>
+            <p className="mt-1 text-[#E84D19]">{errors.birth_date?.message}</p>
           </div>
 
           <div className="mb-8">
@@ -266,8 +231,9 @@ export default function DogUpdateForm() {
                 required: "Height is required",
               })}
               placeholder="Height"
+              onChange={() => clearDataStatus()}
             />
-            <p className="mt-1">{errors.height?.message}</p>
+            <p className="mt-1 text-[#E84D19]">{errors.height?.message}</p>
           </div>
 
           <div className="mb-8">
@@ -282,8 +248,9 @@ export default function DogUpdateForm() {
                 required: "Weight is required",
               })}
               placeholder="Weight"
+              onChange={() => clearDataStatus()}
             />
-            <p className="mt-1">{errors.weight?.message}</p>
+            <p className="mt-1 text-[#E84D19]">{errors.weight?.message}</p>
           </div>
 
           <div className="mb-8">
@@ -298,8 +265,11 @@ export default function DogUpdateForm() {
                 required: "Food per day is required",
               })}
               placeholder="Food per day"
+              onChange={() => clearDataStatus()}
             />
-            <p className="mt-1">{errors.food_per_day?.message}</p>
+            <p className="mt-1 text-[#E84D19]">
+              {errors.food_per_day?.message}
+            </p>
           </div>
 
           <div className="mb-8">
@@ -332,7 +302,7 @@ export default function DogUpdateForm() {
                 <p className="mb-1">sociable</p>
               </label>
             </div>
-            <p className="mt-1">{errors.character?.message}</p>
+            <p className="mt-1 text-[#E84D19]">{errors.character?.message}</p>
           </div>
 
           <div className="mb-8">
@@ -373,15 +343,10 @@ export default function DogUpdateForm() {
           <ButtonText className="w-full" text="Save" />
 
           <div className="my-8 border-t-4 border-dotted border-[#F0E5C2] w-full"></div>
-
-          <div className="flex justify-center">
-            <ButtonDelete
-              text={loadingDelete ? "Deleting..." : `Delete ${dog.name}`}
-              onClick={handleDeleteDog}
-              disabled={loadingDelete}
-            />
-          </div>
         </form>
+        <div className="flex justify-center">
+          <ButtonDelete text={`Delete ${dog.name}`} onClick={handleDeleteDog} />
+        </div>
       </div>
     </div>
   );
