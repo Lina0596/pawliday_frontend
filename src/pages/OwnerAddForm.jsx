@@ -45,7 +45,10 @@ export default function OwnerAddForm() {
         <ErrorMessage>{dataStatus.message}</ErrorMessage>
       ) : null}
 
-      <div className="w-140">
+      <div
+        className="w-full
+        md:w-140"
+      >
         <H2 className="text-center">Add a new owner</H2>
 
         <div className="my-8 border-t-4 border-dotted border-[#F0E5C2] w-full"></div>

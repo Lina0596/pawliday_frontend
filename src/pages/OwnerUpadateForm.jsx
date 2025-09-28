@@ -82,7 +82,10 @@ export default function OwnerUpadateForm() {
         <SuccessMessage>{dataStatus.message}</SuccessMessage>
       ) : null}
 
-      <div className="w-140">
+      <div
+        className="w-full
+        md:w-140"
+      >
         <H2 className="text-center">{`${owner.first_name} ${owner.last_name}`}</H2>
         <div className="my-8 border-t-4 border-dotted border-[#F0E5C2] w-full"></div>
         <form onSubmit={handleSubmit(handleUpdateOwner)}>

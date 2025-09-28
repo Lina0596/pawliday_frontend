@@ -7,7 +7,12 @@ import { Plus } from "lucide-react";
 
 export default function OwnerCards({ owners, dogs }) {
   return (
-    <div className="grid gap-8 grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
+    <div
+      className="grid gap-8 grid-cols-1
+      sm:grid-cols-1
+      lg:grid-cols-2
+      xl:grid-cols-3"
+    >
       {owners.map((owner) => {
         const ownerDogs = dogs.filter((dog) => dog.owner_id === owner.owner_id);
         return (

@@ -6,7 +6,7 @@ import { CircleArrowRight } from "lucide-react";
 
 export default function NewUserCard() {
   return (
-    <div className="flex items-center justify-between p-10 w-full h-45 rounded-sm bg-[#F9F3E1]">
+    <div className="flex items-center justify-between p-16 w-full h-64 rounded-sm bg-[#F9F3E1]">
       <div className="w-[60%]">
         <H4 className="mb-4">Add your first 4-legged visitor!</H4>
         <TextSection>

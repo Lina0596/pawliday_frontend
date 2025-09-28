@@ -27,7 +27,10 @@ export default function DecisionForm() {
 
   return (
     <div className="flex flex-col items-center justify-center">
-      <div className="w-140">
+      <div
+        className="w-full
+        md:w-140"
+      >
         <H2 className="text-center">Add a dog</H2>
 
         <div className="my-8 border-t-4 border-dotted border-[#F0E5C2] w-full"></div>

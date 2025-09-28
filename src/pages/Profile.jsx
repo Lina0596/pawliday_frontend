@@ -76,7 +76,10 @@ export default function Profile() {
         <SuccessMessage>{status.message}</SuccessMessage>
       ) : null}
 
-      <div className="w-140">
+      <div
+        className="w-full
+        md:w-140"
+      >
         <div className="flex justify-between ">
           <H2 className="mb-8 text-center">Your Profile</H2>
           <ButtonIconSecondary

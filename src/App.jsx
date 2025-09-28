@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { DataProvider } from "./context/DataContext";
 import { AuthProvider } from "./context/AuthContext";
+import ScrollToTop from "./components/ScrollToTop";
 import AuthProtection from "./components/AuthProtection";
 import Layout from "./components/Layout";
 import Login from "./pages/Login";
@@ -19,6 +20,7 @@ import DecisionForm from "./pages/DecisionForm";
 export default function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <AuthProvider>
         <DataProvider>
           <Routes>

@@ -8,12 +8,19 @@ import { UserRound, LogIn } from "lucide-react";
 
 export default function Header() {
   const { isAuthenticated } = useContext(AuthContext);
+
   return (
-    <div className="flex items-center justify-between h-16 px-4 bg-[#F9F3E1] xl:px-45 lg:px-40 md:px-20 sm:px-10">
+    <div
+      className="flex items-center justify-between h-16 px-4 bg-[#F9F3E1]
+      sm:px-10
+      md:px-20
+      lg:px-40
+      xl:px-45"
+    >
       <Link to="/">
         <Logo />
       </Link>
-      <div className="flex items-center gap-16">
+      <div className="flex items-center gap-6 md:gap-16">
         {isAuthenticated ? (
           <>
             <Link to="dogs" className="font-black text-base">
