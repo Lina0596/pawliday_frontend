@@ -10,9 +10,9 @@ export default function NewUserCard() {
       <div className="w-[60%]">
         <H4 className="mb-4">Add your first 4-legged visitor!</H4>
         <TextSection>
-          Lorem ipsum dolor sit amet consectetur. Blandit congue sit sagittis
-          cursus netus. Integer elementum eget libero et pellentesque blandit
-          pellentesque viverra varius.
+          You are new here? Let's add a furry friend! First you have to add the
+          owner of the dog you will be taking care of, then you can continue to
+          add the dog itself. It's quite easy, just click the button and start!
         </TextSection>
       </div>
       <Link to="/dogs/add">

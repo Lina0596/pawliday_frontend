@@ -24,8 +24,7 @@ export default function ContentCard({ dogs }) {
         <div>
           <H2 className="mb-4">{dogs.length} Dogs checked in</H2>
           <TextSection>
-            Lorem ipsum dolor sit amet consectetur. Blandit congue sit sagittis
-            cursus netus.
+            There are some dogs checked in! Click the button and check them out.
           </TextSection>
         </div>
         <Link to="/dogs">

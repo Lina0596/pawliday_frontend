@@ -22,7 +22,7 @@ export default function UspContentCards() {
         <div className="p-8 h-[50%]">
           <H4 className="mb-2">Owners</H4>
           <TextSection>
-            All important informations about the dog owners in one place.
+            Manage all important informations about the dog owners in one place.
           </TextSection>
         </div>
       </div>
@@ -34,9 +34,10 @@ export default function UspContentCards() {
           className="w-full h-[50%] object-cover rounded-t-sm"
         />
         <div className="p-8 h-[50%]">
-          <H4 className="mb-2">Needs</H4>
+          <H4 className="mb-2">Sitters</H4>
           <TextSection>
-            Check up how much food each dog gets in one day.
+            Feed each dog is just a small piece of taking care of furry
+            individuals.
           </TextSection>
         </div>
       </div>
@@ -50,7 +51,8 @@ export default function UspContentCards() {
         <div className="p-8 h-[50%]">
           <H4 className="mb-2">Dogs</H4>
           <TextSection>
-            Manage differnt Dogs based on their characters and social needs.
+            You can manage differnt Dogs based on their characters and social
+            needs.
           </TextSection>
         </div>
       </div>

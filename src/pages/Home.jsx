@@ -26,9 +26,10 @@ export default function Home() {
       <div className="flex flex-col items-center mb-8 text-center">
         <H1 className="mb-8">Hello Doglover!</H1>
         <TextSection className="w-140">
-          Lorem ipsum dolor sit amet consectetur. Blandit congue sit sagittis
-          cursus netus. Integer elementum eget libero et pellentesque blandit
-          pellentesque viverra varius.
+          Pawliday is an efficient digital organization tool for dog care
+          services based on the individual characters and needs of the animals.
+          Here you have all important data about the dogs and the owners in one
+          place.
         </TextSection>
       </div>
       <UspContentCards />
