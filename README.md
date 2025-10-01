@@ -1,6 +1,6 @@
-# 🐾 Pawliday Frontend
+# 🐾 pawliday frontend
 
-The **Pawliday Frontend** is the client-side application for the Pawliday project — a web app that helps dog owners manage their pets and organize vacation care.  
+The **pawliday frontend** is the client-side application for the Pawliday project — a web app that helps dog owners manage their pets and organize vacation care.  
 Built with **React (Vite)**, it provides a modern and responsive user interface and integrates with the Pawliday Flask backend.
 
 ---
@@ -8,9 +8,9 @@ Built with **React (Vite)**, it provides a modern and responsive user interface 
 ## 🚀 Features
 
 - ⚡ **Modern UI:** Fast, responsive frontend built with React + Vite
-- 📋 **Forms:** Dog management using React Hook Form
+- 📋 **Forms:** Dog management using React Hook Form (add/update/delete owners, dogs and user profile)
 - 📷 **Image Upload:** Integration with [imagekit.io](https://imagekit.io/) for storing dog images
-- 🔑 **Authentication Support:** Works with Pawliday backend for login & registration
+- 🔑 **Authentication Support:** Works with pawliday backend for login, logout & registration
 - 🌐 **API Integration:** Communicates with the Flask backend via Axios
 
 ---
@@ -71,20 +71,12 @@ cd pawliday_frontend
 
 npm install
 
+# 🔑 Environment Variables
+
+Create a .env file in the project root with your keys:
+VITE_API_BASE_URL=http://localhost:5000/api
+VITE_IMAGEKIT_PUBLIC_KEY=your_imagekit_public_key
+
 ## Running the App
 
 npm run dev
-
-## Project Structure
-
-pawliday_frontend/
-├── public/ # Static assets
-├── src/ # Application source code
-│ ├── components/ # Reusable UI components
-│ ├── pages/ # Page-level components
-│ ├── hooks/ # Custom hooks (e.g., form handling)
-│ ├── services/ # API calls via Axios
-│ └── main.jsx # Application entry point
-├── .env.example # Example environment variables
-├── package.json
-└── vite.config.js
