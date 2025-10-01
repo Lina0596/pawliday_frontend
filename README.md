@@ -1,7 +1,7 @@
 # 🐾 pawliday frontend
 
-The **pawliday frontend** is the client-side application for the Pawliday project — a web app that helps dog owners manage their pets and organize vacation care.  
-Built with **React (Vite)**, it provides a modern and responsive user interface and integrates with the Pawliday Flask backend.
+The **pawliday frontend** is the client-side application for the pawliday project — a web app and efficient digital organization tool for dog care services based on the individual characters and needs of the animals. As a dog sitter you can manage all important data about the dogs and the owners in one place.  
+Built with **React (Vite)**, it provides a modern and responsive user interface and integrates with the pawliday Flask backend.
 
 ---
 
@@ -20,11 +20,6 @@ Built with **React (Vite)**, it provides a modern and responsive user interface 
 1. [About the Project](#-about-the-project)
 2. [Tech Stack](#-tech-stack)
 3. [Getting Started](#-getting-started)
-4. [Project Structure](#-project-structure)
-5. [Environment Variables](#-environment-variables)
-6. [Available Scripts](#-available-scripts)
-7. [Contributing](#-contributing)
-8. [License](#-license)
 
 ---
 
@@ -32,7 +27,7 @@ Built with **React (Vite)**, it provides a modern and responsive user interface 
 
 The **Pawliday Frontend** is responsible for rendering the user interface and handling:
 
-- User interactions like registration, login, and dog management
+- User interactions like registration, login, owner and dog management
 - Communication with the Flask API
 - Image uploads using the imagekit.io SDK
 
@@ -62,21 +57,21 @@ This repository does **not** include the backend — it must be running separate
 
 Clone the repository and install dependencies:
 
-# Clone this repository
+### Clone this repository
 
 git clone https://github.com/Lina0596/pawliday_frontend.git
 cd pawliday_frontend
 
-# Install dependencies
+### Install dependencies
 
 npm install
 
-# 🔑 Environment Variables
+### 🔑 Environment Variables
 
 Create a .env file in the project root with your keys:
 VITE_API_BASE_URL=http://localhost:5000/api
 VITE_IMAGEKIT_PUBLIC_KEY=your_imagekit_public_key
 
-## Running the App
+### Running the App
 
 npm run dev
